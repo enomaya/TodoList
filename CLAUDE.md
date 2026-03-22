@@ -12,17 +12,17 @@
 
 ## 기술 스택
 
-| 영역 | 도구 |
-|------|------|
-| UI 프레임워크 | React 19 |
-| 언어 | TypeScript 5.8+ |
-| 빌드 도구 | Vite |
-| 스타일링 | CSS Modules 또는 Tailwind CSS |
-| 상태 관리 | useState / useReducer (단순), Zustand (전역 필요 시) |
-| 폼 | React Hook Form |
-| 테스트 | Vitest + React Testing Library |
-| 린팅 | ESLint Flat Config + typescript-eslint |
-| 포매팅 | Prettier |
+| 영역 | 도구 | 버전 |
+|------|------|------|
+| UI 프레임워크 | React | 19.2.4 |
+| 언어 | TypeScript | 5.9.3 |
+| 빌드 도구 | Vite | 8.0.1 |
+| 스타일링 | CSS Modules | — |
+| 상태 관리 | useState / useReducer (단순), Zustand (전역 필요 시) | — |
+| 폼 | React Hook Form | — |
+| 테스트 | Vitest + React Testing Library | 4.1.0 / 16.3.2 |
+| 린팅 | ESLint Flat Config + typescript-eslint | 9.39.4 / 8.57.0 |
+| 포매팅 | Prettier | — |
 
 ### React 19 주요 활용 지침
 
@@ -38,6 +38,19 @@
 - `--strict` 모드 활성화 필수
 - `--erasableSyntaxOnly` + `--verbatimModuleSyntax` 조합으로 엄격한 모듈 체계 유지
 - 조건부 타입, 템플릿 리터럴 타입, 매핑 타입을 적극 활용
+
+---
+
+## 명령어
+
+| 명령어 | 설명 |
+|--------|------|
+| `npm run dev` | 개발 서버 실행 (http://localhost:5173) |
+| `npm run build` | 프로덕션 빌드 (`dist/` 생성) |
+| `npm run preview` | 빌드 결과물 로컬 미리보기 |
+| `npm run lint` | ESLint 검사 실행 |
+| `npm test` | 테스트 워치 모드 실행 |
+| `npm run test:run` | 테스트 단일 실행 (CI용) |
 
 ---
 
@@ -66,6 +79,27 @@ src/
 ---
 
 ## 코딩 규칙
+
+### 코드 스타일
+
+- **들여쓰기**: 스페이스 2칸
+- **따옴표**: 문자열은 작은따옴표(`'`) 사용, JSX 속성은 큰따옴표(`"`) 사용
+- **세미콜론**: 생략 (ASI 활용)
+- **후행 쉼표**: 여러 줄 객체/배열의 마지막 요소에 쉼표 추가
+- **줄 길이**: 최대 100자
+- **함수 선언**: 컴포넌트는 `function` 선언식, 일반 함수는 화살표 함수 우선
+- **import 순서**: 외부 라이브러리 → 내부 모듈 → 상대 경로 순, 각 그룹 사이 빈 줄 구분
+
+```ts
+// ✅ import 순서 예시
+import { useState } from 'react'
+import type { FC } from 'react'
+
+import { useTodo } from '@/features/todo'
+
+import type { Todo } from './types'
+import styles from './TodoItem.module.css'
+```
 
 ### 컴포넌트
 
@@ -156,6 +190,23 @@ test('할 일을 추가하면 목록에 표시된다', async () => {
   expect(screen.getByText('운동하기')).toBeInTheDocument()
 })
 ```
+
+---
+
+## 절대 수정 금지 파일
+
+아래 파일들은 프로젝트 설정의 핵심으로, 명시적인 요청 없이 절대 수정하지 않는다.
+
+| 파일 | 이유 |
+|------|------|
+| `package-lock.json` | npm이 자동 관리하는 의존성 잠금 파일 — 직접 편집 금지 |
+| `tsconfig.json` | TypeScript 프로젝트 레퍼런스 루트 설정 |
+| `tsconfig.app.json` | 앱 소스 컴파일 설정 — strict 모드 포함 |
+| `tsconfig.node.json` | Vite 설정 파일용 TypeScript 설정 |
+| `vite.config.ts` | 빌드 및 테스트 환경 설정 |
+| `eslint.config.js` | 린트 규칙 설정 |
+| `src/main.tsx` | 앱 진입점 — 렌더링 루트 |
+| `src/test/setup.ts` | 테스트 전역 설정 (jest-dom 확장) |
 
 ---
 
